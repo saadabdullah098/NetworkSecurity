@@ -1,8 +1,10 @@
-#Ignore the virtual environment folder
+#Ignore these files
 venv/
+logs/
 
 #Ignore environemental variables
 .env
 
 # Ignore egg-info metadata folders (commonly generated during builds)
 *.egg-info/
+*__pycache__/
