@@ -1,2 +1,8 @@
+#Ignore the virtual environment folder
 venv/
+
+#Ignore environemental variables
 .env
+
+# Ignore egg-info metadata folders (commonly generated during builds)
+*.egg-info/
