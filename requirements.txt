@@ -1,0 +1,5 @@
+python-dotenv #used to call environment variables
+jupyter 
+pandas 
+numpy
+scikit-learn
