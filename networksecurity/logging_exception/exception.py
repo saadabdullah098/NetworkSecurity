@@ -6,7 +6,7 @@ It gives detailed error messages, including: what the error was, line it occurre
 #The sys module in Python provides access to variables and functions 
 #that interact closely with the Python interpreter and its runtime environment.
 import sys
-from src.logger import logging
+from networksecurity.logging_exception.logging import logging
 
 def error_message_detail(error,error_detail:sys):
     '''
