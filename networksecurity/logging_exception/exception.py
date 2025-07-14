@@ -6,7 +6,7 @@
 #The sys module in Python provides access to variables and functions 
 #that interact closely with the Python interpreter and its runtime environment.
 import sys
-from logger import logging
+#from logger import logging
 class CustomException(Exception):
     '''
         This class defines a custom error class that inherits from Python's built-in Exception class.
