@@ -1,6 +1,5 @@
 import os
 import sys
-import json
 import certifi
 from dotenv import load_dotenv
 
@@ -57,7 +56,7 @@ class NetworkDataExtract():
             self.database = database
             self.collection = collection
             
-            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL)
+            self.mongo_client = pymongo.MongoClient(MONGO_DB_URL, tlsCAFile=certifi.where())
             self.database = self.mongo_client[self.database]
             self.collection = self.database[self.collection]
 
