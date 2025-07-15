@@ -1,6 +1,7 @@
 #Ignore these folders
 venv/
 logs/
+Artifacts/
 
 #Ignore environemental variables
 .env
@@ -11,3 +12,5 @@ logs/
 # Ignore metadata folders (commonly generated during builds)
 *.egg-info/
 *__pycache__/
+*.ipynb_checkpoints/
+
