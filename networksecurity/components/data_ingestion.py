@@ -3,7 +3,6 @@ import sys
 import numpy as np
 import pandas as pd
 import pymongo
-from typing import List
 from dotenv import load_dotenv
 import certifi
 
@@ -21,9 +20,7 @@ MONGO_DB_URL=os.getenv('MONGO_DB_URL')
 
 class DataIngestion():
     def __init__(self, data_ingestion_config:DataIngestionConfig):
-        '''
-            self.data_ingestion_config becomes an instance of DataIngestionConfig class
-        '''
+        #self.data_ingestion_config becomes an instance of DataIngestionConfig class
         try:
             self.data_ingestion_config = data_ingestion_config
         
@@ -102,7 +99,7 @@ class DataIngestion():
             logging.error(custom_err)
             raise custom_err
     
-    def initiate_data_ingestion(self):
+    def initiate_data_ingestion(self)->DataIngestionArtifact:
         '''
             Converts MongoDB as df then saves raw data in feature_store and train, test data in ingested.
             Returns the file paths to training and test data
@@ -119,7 +116,7 @@ class DataIngestion():
                 test_file_path=self.data_ingestion_config.testing_file_path
             )
             
-            logging.info('Data ingestion completed!')
+            logging.info('Data ingestion completed and artifact generated!')
             return data_ingestion_artifact
 
         except Exception as e:
