@@ -8,6 +8,7 @@ Artifacts/
 
 #Ignore these files
 .DS_Store
+practice.py
 
 # Ignore metadata folders (commonly generated during builds)
 *.egg-info/

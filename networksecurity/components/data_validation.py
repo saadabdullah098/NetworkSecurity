@@ -15,20 +15,10 @@ class DataValidation():
                  data_validation_config:DataValidationConfig):
         #initializing artifacts, config, and schema file  
         try:
-            logging.info('Initializing artifacts, config, and schema files')
+            logging.info('Initializing validation artifacts, config, and schema files')
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_validation_config = data_validation_config
             self._schema_config = main_utils.read_yaml_file(SCHEMA_FILE_PATH)
-        except Exception as e:
-            custom_err = CustomException(e, sys)
-            logging.error(custom_err)
-            raise custom_err
-        
-    @staticmethod
-    def read_data(file_path)->pd.DataFrame:
-        #Reads csv file from file path
-        try:
-            return pd.read_csv(file_path)
         except Exception as e:
             custom_err = CustomException(e, sys)
             logging.error(custom_err)
@@ -64,7 +54,6 @@ class DataValidation():
             logging.error(custom_err)
             raise custom_err
 
-    ###### Function to check numerical columns
 
     def detect_dataset_drift(self, base_df, current_df, threshold=0.05)->bool:
         '''
@@ -105,15 +94,14 @@ class DataValidation():
             raise custom_err
     
     def initialize_data_validation(self)->DataValidationArtifact:
+        logging.info('Initiating data validation')
         try:
-            logging.info('Initiating data validation')
-
             #Read data
             train_file_path=self.data_ingestion_artifact.trained_file_path
             test_file_path=self.data_ingestion_artifact.test_file_path
 
-            train_df = DataValidation.read_data(train_file_path)
-            test_df = DataValidation.read_data(test_file_path)
+            train_df = main_utils.read_csv_data(train_file_path)
+            test_df = main_utils.read_csv_data(test_file_path)
             logging.info('Train and test data read and stored.')
 
             #Validate number of columns

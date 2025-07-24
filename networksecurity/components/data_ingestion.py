@@ -104,8 +104,8 @@ class DataIngestion():
             Converts MongoDB as df then saves raw data in feature_store and train, test data in ingested.
             Returns the file paths to training and test data
         '''
+        logging.info('Initiating data ingestion')
         try:
-            logging.info('Initiating data ingestion')
             #Call the function that returns the MongoDB as df then save raw data in feature_store
             dataframe = self.export_collection_as_df()
             self.export_data_to_feature_store(dataframe)
