@@ -29,5 +29,5 @@ class ClassificationMetricArtifact:
 @dataclass
 class ModelTrainerArtifact:
     trained_model_file_path: str
-    train_metric_artifact: ClassificationMetricArtifact
+    train_metric_artifact: ClassificationMetricArtifact #this will contain f1_score, precision_score, recall_score
     test_metric_artifact: ClassificationMetricArtifact

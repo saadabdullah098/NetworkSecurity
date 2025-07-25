@@ -58,6 +58,19 @@ def save_numpy_array_data(file_path: str, array: np.array):
             logging.error(custom_err)
             raise custom_err
     
+def load_numpy_array_data(file_path: str):
+    '''
+        Loads numpy array from file
+    '''
+    try:
+        with open(file_path, 'rb') as file_obj:
+             return np.load(file_obj)
+        
+    except Exception as e:
+            custom_err = CustomException(e, sys)
+            logging.error(custom_err)
+            raise custom_err
+    
 def save_object(file_path:str, obj:object)->None:
     '''
         Creates directory for file and saves object files in .pkl format.
@@ -71,4 +84,19 @@ def save_object(file_path:str, obj:object)->None:
             custom_err = CustomException(e, sys)
             logging.error(custom_err)
             raise custom_err
-     
+    
+def load_object(file_path:str)->None:
+    '''
+        Loads object file from path (usually a .pkl file)
+    '''
+    try:
+         if not os.path.exists(file_path):
+              raise Exception(f'The file: {file_path} does not exist!')
+         with open (file_path, 'rb') as file_obj:
+              print(file_obj)
+              return pickle.load(file_obj)
+        
+    except Exception as e:
+            custom_err = CustomException(e, sys)
+            logging.error(custom_err)
+            raise custom_err
