@@ -1,6 +1,10 @@
 from datetime import datetime
 import os
 from networksecurity.constants import training_pipeline
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+
 
 #Testing import of constants
 print(training_pipeline.ARTIFACT_DIR)
@@ -87,6 +91,40 @@ class ModelTrainerConfig:
             training_pipeline.MODEL_FILE_NAME
         )
         self.expected_accuracy: float = training_pipeline.MODEL_TRAINER_EXPECTED_SCORE
-        self.overfitting_underfitting_threshold = training_pipeline.MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD                                                       
+        self.overfitting_underfitting_threshold = training_pipeline.MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD
+        #Lazy model creation = only instantized when variable is called avoiding unnecessary memory usage
+        self.models = {
+                    "Random Forest": lambda: RandomForestClassifier(verbose=1),
+                    "Decision Tree": lambda: DecisionTreeClassifier(),
+                    "Gradient Boosting": lambda: GradientBoostingClassifier(verbose=1),
+                    "Logistic Regression": lambda: LogisticRegression(verbose=1),
+                    "AdaBoost": lambda: AdaBoostClassifier(),
+                }
+        self.param_grid={
+                "Decision Tree": {
+                    'criterion':['gini', 'entropy', 'log_loss'],
+                    # 'splitter':['best','random'],
+                    # 'max_features':['sqrt','log2'],
+                },
+                "Random Forest":{
+                    # 'criterion':['gini', 'entropy', 'log_loss'],
+                    
+                    # 'max_features':['sqrt','log2',None],
+                    'n_estimators': [8,16,32,128,256]
+                },
+                "Gradient Boosting":{
+                    # 'loss':['log_loss', 'exponential'],
+                    'learning_rate':[.1,.01,.05,.001],
+                    'subsample':[0.6,0.7,0.75,0.85,0.9],
+                    # 'criterion':['squared_error', 'friedman_mse'],
+                    # 'max_features':['auto','sqrt','log2'],
+                    'n_estimators': [8,16,32,64,128,256]
+                },
+                "Logistic Regression":{},
+                "AdaBoost":{
+                    'learning_rate':[.1,.01,.001],
+                    'n_estimators': [8,16,32,64,128,256]
+                }
+            }                                                       
 
                                                 
