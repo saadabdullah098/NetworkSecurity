@@ -8,6 +8,7 @@ from sklearn.metrics import r2_score
 from sklearn.metrics import f1_score,precision_score,recall_score
 from sklearn.model_selection import GridSearchCV
 
+
 def evaluate_models(X_train, y_train, X_test, y_test, models, param):
     '''
         Evaluates multiple models with given hyperparameters and returns:
@@ -42,7 +43,7 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, param):
                 best_model = model
                 best_model_name = model_name
 
-        return report, best_model
+        return report, best_model, best_model_name, best_score
 
     except Exception as e:
             custom_err = CustomException(e, sys)
@@ -93,3 +94,5 @@ class NetworkModel:
             custom_err = CustomException(e, sys)
             logging.error(custom_err)
             raise custom_err
+        
+

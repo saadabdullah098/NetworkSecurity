@@ -4,17 +4,7 @@ from networksecurity.logging_exception.logger import logging
 
 from networksecurity.entity.config_entity import ModelTrainerConfig
 from networksecurity.entity.artifact_entity import DataTransformationArtifact, ModelTrainerArtifact
-from networksecurity.utils import main_utils, ml_utils
-
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import (
-    AdaBoostClassifier,
-    GradientBoostingClassifier,
-    RandomForestClassifier
-)
-from sklearn.metrics import r2_score
+from networksecurity.utils import main_utils, ml_utils, ml_flow
 
 
 class ModelTrainer:
@@ -27,24 +17,28 @@ class ModelTrainer:
             logging.error(custom_err)
             raise custom_err
     
+    
     def train_and_evaluate_model(self, X_train, y_train, X_test, y_test):
         try:
             models = self.model_trainer_config.models
             param_grid = self.model_trainer_config.param_grid
-            model_report, best_model = ml_utils.evaluate_models(X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test,
+            model_report, best_model, best_model_name, best_score = ml_utils.evaluate_models(
+                                                         X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test,
                                                          models=models,param=param_grid)
             
-            # Get best model name and score from the report
-            best_model_name = max(model_report, key=model_report.get)
-            best_model_score = model_report[best_model_name]
-            logging.info(f'Best Model: {best_model_name}, Score: {best_model_score}')
+            logging.info(f'Best Model: {best_model_name}, Score: {best_score}')
             
             logging.info('Generating classification metric artifact using best model.')
             y_train_pred = best_model.predict(X_train)
             classification_train_metric=ml_utils.get_classification_score(y_true=y_train, y_pred=y_train_pred)
+            
 
             y_test_pred = best_model.predict(X_test)
             classification_test_metric=ml_utils.get_classification_score(y_true=y_test, y_pred=y_test_pred)
+
+            logging.info('Tracking experiment in mlflow.')
+            ml_flow.track_mlflow(best_model=best_model, classification_metric=classification_train_metric)
+            ml_flow.track_mlflow(best_model=best_model, classification_metric=classification_test_metric)
             
             logging.info('Saving model object containing preprocessor and model with function to make future predictions.')
             # Create directory to save best model and save NetworkModel obj containing preprocessor and model which can also be used to predict
@@ -53,9 +47,11 @@ class ModelTrainer:
             preprocessor = main_utils.load_object(file_path=self.data_transformation_artifact.transformed_object_file_path)
             Network_Model=ml_utils.NetworkModel(preprocessor=preprocessor,model=best_model)
             main_utils.save_object(self.model_trainer_config.trained_model_file_path, obj=Network_Model)
-            logging.info('Final model object saved.')
             
-
+            #Save final preprocessor and model
+            main_utils.save_object("final_model/model.pkl", Network_Model)
+            logging.info('Final model saved in final_model folder!')
+            
             model_trainer_artifact = ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
                                 train_metric_artifact=classification_train_metric,
                                 test_metric_artifact=classification_test_metric

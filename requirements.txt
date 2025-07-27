@@ -8,4 +8,6 @@ certifi
 scipy
 dill
 pyaml
+mlflow
+dagshub
 #-e . 
