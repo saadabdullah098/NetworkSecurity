@@ -117,6 +117,7 @@ class DataIngestion():
             )
             
             logging.info('Data ingestion completed and artifact generated!')
+            logging.info(data_ingestion_artifact)
             return data_ingestion_artifact
 
         except Exception as e:

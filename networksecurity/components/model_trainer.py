@@ -19,6 +19,11 @@ class ModelTrainer:
     
     
     def train_and_evaluate_model(self, X_train, y_train, X_test, y_test):
+        '''
+            Trains and compares models using GridSearchCV. 
+            Best model is used to make predictions and classification scores are stored.
+            Final model is saved for future predictions.
+        '''
         try:
             models = self.model_trainer_config.models
             param_grid = self.model_trainer_config.param_grid
@@ -88,6 +93,7 @@ class ModelTrainer:
             model_trainer_artifact = self.train_and_evaluate_model(X_train, y_train, X_test, y_test)
 
             logging.info('Models trained and evaluated, best model chosen, and artifact generated.')
+            logging.info(model_trainer_artifact)
             return model_trainer_artifact
 
 

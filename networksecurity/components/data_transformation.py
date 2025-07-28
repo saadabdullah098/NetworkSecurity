@@ -81,6 +81,7 @@ class DataTransformation:
             )
 
             logging.info('Data transformation complete and artifacts generated!')
+            logging.info(data_transformation_artifact)
             return data_transformation_artifact
 
 
