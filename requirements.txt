@@ -12,4 +12,7 @@ mlflow
 dagshub
 fastapi
 uvicorn
+python-multipart
+jinja2
+requests
 #-e . 
