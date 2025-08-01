@@ -1,0 +1,40 @@
+# Ignore virtual environments and generated folders
+venv/
+logs/
+Artifacts/
+
+# Ignore environment files
+.env
+
+# Ignore system files and personal scripts
+.DS_Store
+practice.py
+
+# Git & version control
+.git/
+.gitignore
+
+# Ignore Python build and cache
+__pycache__/
+.ipynb_checkpoints/
+*.egg-info/
+
+# Docker-related
+Dockerfile
+.dockerignore
+
+# IDE/editor files
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+.vscode/
+.idea/
+
+# Test artifacts
+coverage/
+*.cover
+*.egg-info/
+dist/
+build/
