@@ -93,7 +93,7 @@ class DataValidation():
             logging.error(custom_err)
             raise custom_err
     
-    def initialize_data_validation(self)->DataValidationArtifact:
+    def initiate_data_validation(self)->DataValidationArtifact:
         logging.info('Initiating data validation')
         try:
             #Read data

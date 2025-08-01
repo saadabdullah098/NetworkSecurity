@@ -60,7 +60,6 @@ async def train_route():
 async def predict_route(request: Request,file: UploadFile = File(...)):
     try:
         df=pd.read_csv(file.file)
-        #print(df)
         network_model=main_utils.load_object("final_model/model.pkl")
         print(df.iloc[0])
         y_pred = network_model.predict(df)
@@ -69,7 +68,10 @@ async def predict_route(request: Request,file: UploadFile = File(...)):
         print(df['predicted_column'])
         #df['predicted_column'].replace(-1, 0)
         #return df.to_json()
-        df.to_csv('prediction_output/output.csv') #can save to a MongoDB as well
+        
+        # Save to local folder and S3 bucket
+        ml_utils.sync_prediction_dir_to_s3(df)
+        
         table_html = df.to_html(classes='table table-striped')
         #print(table_html)
         return templates.TemplateResponse("table.html", {"request": request, "table": table_html})

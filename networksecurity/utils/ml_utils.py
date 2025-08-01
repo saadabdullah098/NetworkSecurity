@@ -1,8 +1,12 @@
 import sys
+from datetime import datetime
+import os
 from networksecurity.logging_exception.exception import CustomException
 from networksecurity.logging_exception.logger import logging
 
 from networksecurity.entity.artifact_entity import ClassificationMetricArtifact
+from networksecurity.constants.training_pipeline import TRAINING_BUCKET_NAME
+from networksecurity.cloud.s3_syncer import S3Sync
 
 from sklearn.metrics import r2_score
 from sklearn.metrics import f1_score,precision_score,recall_score
@@ -96,3 +100,20 @@ class NetworkModel:
             raise custom_err
         
 
+def sync_prediction_dir_to_s3(df):
+        try:
+            # saving in local folder
+            save_location = f'prediction_output/{datetime.now().strftime("%Y%m%d%H%M%S")}'
+            os.makedirs(save_location,exist_ok=True)
+            df.to_csv(f'{save_location}/output.csv') 
+            
+            # saving in s3 bucket
+            s3_sync = S3Sync()
+            aws_bucket_url = f"s3://{TRAINING_BUCKET_NAME}/{save_location}"
+            s3_sync.sync_folder_to_s3(folder = save_location, aws_bucket_url=aws_bucket_url)
+            logging.info(f"Prediction output synced to s3 bucket: {aws_bucket_url}")
+        
+        except Exception as e:
+            custom_err = CustomException(e, sys)
+            logging.error(custom_err)
+            raise custom_err
