@@ -1,17 +1,17 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bullseye
 
 # Set working directory
 WORKDIR /app
 
-# Copy app code into the container working directory
+# Copy app code into the container
 COPY . /app
 
-# Install awscli without extra dependencies and clean up apt cache
-RUN apt update && \
-    apt install -y --no-install-recommends awscli && \
+# Install awscli and clean up apt cache
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends awscli && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies without caching to reduce image size
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Default command to run your app
